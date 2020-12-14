@@ -1,4 +1,6 @@
 from tkinter import *
+import classes as cl
+import random
 
 window = Tk()
 
@@ -48,7 +50,23 @@ Player = PhotoImage(master=window, file='PixelArts/Player.gif')
 Protection = PhotoImage(master=window, file='PixelArts/Protection.gif')
 
 
+Partie = cl.Game()
+myScore.set('SCORE : ' + str(Partie.Score))
+Partie.createEntities()
+Partie.update(window,Canevas)
 
+"""
+for items in Partie.update(window,Canevas):
+    print(items)
+    PixelArt = PhotoImage(master=window, file='PixelArts/' + items.afficher()[1])
+    Canevas.create_image(items.afficher()[0][0], items.afficher()[0][1], image=PixelArt)
+    """
+
+"""
+Canevas.create_image(50, 400, image=Alien1)
+Canevas.create_image(50, 450, image=Alien1)
+"""
+"""
 class Game:
     def __int__(self,Alien1):
         self.Alien1 = Alien1
@@ -56,7 +74,7 @@ class Game:
     def alienDispplay(self,Alien1):
         for i in range(1,16):
             Canevas.create_image(50*i, 50, image=Alien1)
-
+"""
 
 menuBar = Menu(window)
 menuGame = Menu(menuBar, tearoff=0)
