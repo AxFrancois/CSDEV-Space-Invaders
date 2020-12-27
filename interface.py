@@ -1,6 +1,11 @@
 from tkinter import *
 import classes as cl
-import random
+import random, time, math
+
+
+def key_pressed(event):
+     print("Key Pressed:"+event.keysym)
+
 
 window = Tk()
 
@@ -41,41 +46,6 @@ replayButton.grid(row=0, column=0, pady=(0, 50), padx=(20, 0))
 quitButton = Button(rightFrame, text='Quitter', bg='#A2A4AA', fg='#000000', font=('Terminal', 10), command=window.quit)
 quitButton.grid(row=1, column=0, pady=(50, 0), padx=(20, 0))
 
-Alien1 = PhotoImage(master=window, file='PixelArts/Alien_1.gif')
-Alien2 = PhotoImage(master=window, file='PixelArts/Alien_2.gif')
-Alien3 = PhotoImage(master=window, file='PixelArts/Alien_3.gif')
-Alien4 = PhotoImage(master=window, file='PixelArts/Alien_4.gif')
-Explosion = PhotoImage(master=window, file='PixelArts/Explosion.gif')
-Player = PhotoImage(master=window, file='PixelArts/Player.gif')
-Protection = PhotoImage(master=window, file='PixelArts/Protection.gif')
-
-
-Partie = cl.Game()
-myScore.set('SCORE : ' + str(Partie.Score))
-Partie.createEntities()
-Partie.update(window,Canevas)
-
-"""
-for items in Partie.update(window,Canevas):
-    print(items)
-    PixelArt = PhotoImage(master=window, file='PixelArts/' + items.afficher()[1])
-    Canevas.create_image(items.afficher()[0][0], items.afficher()[0][1], image=PixelArt)
-    """
-
-"""
-Canevas.create_image(50, 400, image=Alien1)
-Canevas.create_image(50, 450, image=Alien1)
-"""
-"""
-class Game:
-    def __int__(self,Alien1):
-        self.Alien1 = Alien1
-
-    def alienDispplay(self,Alien1):
-        for i in range(1,16):
-            Canevas.create_image(50*i, 50, image=Alien1)
-"""
-
 menuBar = Menu(window)
 menuGame = Menu(menuBar, tearoff=0)
 menuGame.add_command(label="Rejouer", command="")
@@ -84,4 +54,18 @@ menuGame.add_command(label="A propos", command="")
 menuBar.add_cascade(label="Jeux", menu=menuGame)
 window.config(menu=menuBar)
 
-window.mainloop()
+
+Partie = cl.Game(window,Canevas)
+myScore.set('SCORE : ' + str(Partie.Score))
+Partie.clock_update(0)
+
+clock = 0
+delay = round(1/60, 4)
+
+while Partie.Vie != 0:
+    window.bind("<Key>", Partie.ActionJoueur)
+    clock = round(clock + delay,4)
+    frame = abs((math.floor(clock*2)) % - 2)
+    Partie.clock_update(frame)  
+    time.sleep(delay) 
+    window.update()
