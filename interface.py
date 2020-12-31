@@ -61,11 +61,15 @@ Partie.clock_update(0)
 
 clock = 0
 delay = round(1/60, 4)
+frame_buffer = 0
 
 while Partie.Vie != 0:
     window.bind("<Key>", Partie.ActionJoueur)
     clock = round(clock + delay,4)
     frame = abs((math.floor(clock*2)) % - 2)
+    if frame != frame_buffer :
+        Partie.position_ennemis_update()  
+    frame_buffer = frame
     Partie.clock_update(frame)  
     time.sleep(delay) 
     window.update()

@@ -6,6 +6,18 @@ Created on Mon Dec 14 15:47:45 2020
 """
 from tkinter import *
 
+
+def fAuBoutDuBout(pListeDesEnnemis, pDirectionPrecedente):  #Pour detecter si un alien a atteint un bord
+    Moove = pDirectionPrecedente
+    for i,item in enumerate(pListeDesEnnemis): #Pour chacune des lignes
+        if item != []:
+            if item[0].Position[0] <= 50: #Si l'ennemi le plus a gauche est trop proche de la limite
+                Moove = "r"
+            elif item[-1].Position[0] >= 600: #Si l'ennemi le plus a droite est trop proche de la limite
+                Moove = "l"
+    return Moove
+        
+
 class Game:
     
     def __init__(self, pWindow, pCanevas):
@@ -18,6 +30,7 @@ class Game:
         self.TopScore = open('HighScore.txt', 'r')
         self.createEntities()
         self.Projectile = []
+        self.direction = "r"
     
     def createEntities(self):
         self.Joueur = EntitéJoueur([50,450],'Player.gif', 'Player_mort.gif')
@@ -45,6 +58,22 @@ class Game:
                 if item.Position[1] < 0 : #Holala j'ai faillit faire un mémory leak en l'oubliant !!
                     self.Projectile.remove(item)
                 item.afficher(self.Window, self.Canevas)
+                
+    def position_ennemis_update(self):
+        self.NouvelleDirection = fAuBoutDuBout([self.Aliens1, self.Aliens2[0], self.Aliens2[1], self.Aliens3[0], self.Aliens3[1]],self.direction)
+        
+        for item in self.Aliens1:
+            item.sliding(self.direction,self.NouvelleDirection)
+            
+        for k,liste in enumerate(self.Aliens2):
+            for i,item in enumerate(liste):
+                item.sliding(self.direction,self.NouvelleDirection)
+        
+        for k,liste in enumerate(self.Aliens3):
+            for i,item in enumerate(liste):
+                item.sliding(self.direction,self.NouvelleDirection)
+                
+        self.direction = self.NouvelleDirection 
             
     def ActionJoueur(self, event):
         pKey = event.keysym
@@ -65,12 +94,20 @@ class Entité:
         return self.Position
     
 class EntitéEnnemiClassique(Entité):
-     def afficher(self, pWindow, pCanevas, pFrame):
+    def afficher(self, pWindow, pCanevas, pFrame):
         if pFrame == 0:
             self.PixelArt = PhotoImage(master=pWindow, file='PixelArts/' + self.Frame1)
         else:
             self.PixelArt = PhotoImage(master=pWindow, file='PixelArts/' + self.Frame2)
         pCanevas.create_image(self.Position[0], self.Position[1], image=self.PixelArt)
+    
+    def sliding(self, pAncienneDirection, pNouvelleDirection):
+        if pNouvelleDirection != pAncienneDirection:
+            self.Position = [self.Position[0], self.Position[1] + 30]  
+        elif pNouvelleDirection == "r":
+            self.Position = [self.Position[0] + 20, self.Position[1]]
+        elif pNouvelleDirection == "l":
+            self.Position = [self.Position[0] - 20, self.Position[1]]
     
 class EntitéJoueur(Entité):
     def Mouvement(self, pKey):
