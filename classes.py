@@ -34,6 +34,7 @@ class Game:
         self.direction = "r"
         self.createSpecialEntities()
         self.spawnDelay = 0.6
+        self.createProtection()
 
     def createEntities(self):
         self.Joueur = EntitéJoueur([50,450],'Player.gif', 'Player_mort.gif')
@@ -45,11 +46,13 @@ class Game:
         self.Aliens4 = EntitéEnnemiSpeciale([50, 20], 'Alien_4.gif')
 
     def createProtection(self):
-        self.Protect = [EntitéProtection([50 + i*120,200],'Protection.gif') for i in range(4)]
-        print('procte')
+        self.Protect = [EntitéProtection([50 + i*120,200], 'Protection.gif') for i in range(4)]
+
     def clock_update(self, pFrame):
         self.Joueur.afficher(self.Window, self.Canevas)
-        self.Protect.afficherProtection(self.Window, self.Canevas)
+
+        for item in self.Protect:
+            item.afficherProtection(self.Window, self.Canevas)
 
         for item in self.Aliens1:
             item.afficher(self.Window, self.Canevas, pFrame)
