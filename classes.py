@@ -46,7 +46,7 @@ class Game:
         self.Aliens4 = EntitéEnnemiSpeciale([50, 20], 'Alien_4.gif')
 
     def createProtection(self):
-        self.Protect = [EntitéProtection([50 + i*120,200], 'Protection.gif') for i in range(4)]
+        self.Protect = [EntitéProtection([140 + i*120,400], 'Protection.gif') for i in range(4)]
 
     def clock_update(self, pFrame):
         self.Joueur.afficher(self.Window, self.Canevas)
