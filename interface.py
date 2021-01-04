@@ -43,13 +43,13 @@ Canevas.grid(row=1, column=0,)
 replayButton = Button(rightFrame, text='New game', bg='#A2A4AA', fg='#000000', font=('Terminal', 10), command="")
 replayButton.grid(row=0, column=0, pady=(0, 50), padx=(20, 0))
 
-quitButton = Button(rightFrame, text='Quitter', bg='#A2A4AA', fg='#000000', font=('Terminal', 10), command=window.quit)
+quitButton = Button(rightFrame, text='Quitter', bg='#A2A4AA', fg='#000000', font=('Terminal', 10), command=window.destroy)
 quitButton.grid(row=1, column=0, pady=(50, 0), padx=(20, 0))
 
 menuBar = Menu(window)
 menuGame = Menu(menuBar, tearoff=0)
 menuGame.add_command(label="Rejouer", command="")
-menuGame.add_command(label="Quitter", command=window.quit)
+menuGame.add_command(label="Quitter", command=window.destroy)
 menuGame.add_command(label="A propos", command="")
 menuBar.add_cascade(label="Jeux", menu=menuGame)
 window.config(menu=menuBar)
@@ -70,6 +70,7 @@ while Partie.Vie != 0:
     if frame != frame_buffer :
         Partie.position_ennemis_update()  
     frame_buffer = frame
-    Partie.clock_update(frame)  
-    time.sleep(delay) 
+    Partie.clock_update(frame)
+    myScore.set('SCORE : ' + str(Partie.Score))
+    time.sleep(delay)
     window.update()

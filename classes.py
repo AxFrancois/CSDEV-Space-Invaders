@@ -6,7 +6,7 @@ Created on Mon Dec 14 15:47:45 2020
 """
 from tkinter import *
 import math
-
+import random
 
 def fAuBoutDuBout(pListeDesEnnemis, pDirectionPrecedente):  #Pour detecter si un alien a atteint un bord
     Moove = pDirectionPrecedente
@@ -32,12 +32,17 @@ class Game:
         self.createEntities()
         self.Projectile = []
         self.direction = "r"
-    
+        self.createSpecialEntities()
+        self.spawnDelay = 0.6
+
     def createEntities(self):
         self.Joueur = EntitéJoueur([50,450],'Player.gif', 'Player_mort.gif')
         self.Aliens1 = [EntitéEnnemiClassique([50 + i*40,50],'Alien_1_frame1.gif', 'Alien_1_frame2.gif') for i in range(11)]
         self.Aliens2 = [[EntitéEnnemiClassique([50 + i*40, 70 + j*20],'Alien_2_frame1.gif', 'Alien_2_frame2.gif') for i in range(11)] for j in range(2)]
         self.Aliens3 = [[EntitéEnnemiClassique([50 + i*40, 110 + j*20],'Alien_3_frame1.gif', 'Alien_3_frame2.gif') for i in range(11)] for j in range(2)]
+
+    def createSpecialEntities(self):
+        self.Aliens4 = EntitéEnnemiSpeciale([50, 20], 'Alien_4.gif')
     
     def clock_update(self, pFrame):
         self.Joueur.afficher(self.Window, self.Canevas)
@@ -61,8 +66,11 @@ class Game:
                 kill = item.hitbox1(self.Canevas, [self.Aliens1, self.Aliens2[0], self.Aliens2[1], self.Aliens3[0], self.Aliens3[1]])
                 if kill == True:
                     self.Projectile.remove(item)
+                    self.Score += 10
                 item.afficher(self.Window, self.Canevas)
-                
+        if pFrame > self.spawnDelay :
+            self.Aliens4.afficherSpecial(self.Window, self.Canevas, 1)
+
     def position_ennemis_update(self):
         self.NouvelleDirection = fAuBoutDuBout([self.Aliens1, self.Aliens2[0], self.Aliens2[1], self.Aliens3[0], self.Aliens3[1]],self.direction)
         
@@ -87,6 +95,8 @@ class Game:
         elif pKey == "Right" or pKey == "Left":
             self.Joueur.Mouvement(pKey)
         #self.update()
+
+
         
 class Entité:
     def __init__(self, pPositionInitiale, pImage1, pImage2 = None):
@@ -104,6 +114,7 @@ class EntitéEnnemiClassique(Entité):
         else:
             self.PixelArt = PhotoImage(master=pWindow, file='PixelArts/' + self.Frame2)
         pCanevas.create_image(self.Position[0], self.Position[1], image=self.PixelArt)
+
     
     def sliding(self, pAncienneDirection, pNouvelleDirection):
         if pNouvelleDirection != pAncienneDirection:
@@ -112,6 +123,13 @@ class EntitéEnnemiClassique(Entité):
             self.Position = [self.Position[0] + 20, self.Position[1]]
         elif pNouvelleDirection == "l":
             self.Position = [self.Position[0] - 20, self.Position[1]]
+
+class EntitéEnnemiSpeciale(Entité) :
+    def afficherSpecial(self, pWindow, pCanevas, pX):
+        self.PixelArt = PhotoImage(master=pWindow, file='PixelArts/' + self.Frame1)
+        for i in range(0,20):
+            pCanevas.create_image(50 + pX * i, 20, image=self.PixelArt)
+
     
 class EntitéJoueur(Entité):
     def Mouvement(self, pKey):
