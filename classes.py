@@ -5,6 +5,7 @@ Created on Mon Dec 14 15:47:45 2020
 @author: Axel François
 """
 from tkinter import *
+import math
 
 
 def fAuBoutDuBout(pListeDesEnnemis, pDirectionPrecedente):  #Pour detecter si un alien a atteint un bord
@@ -56,6 +57,9 @@ class Game:
             if isinstance(item, EntitéTirJoueur):
                 item.Position = [item.Position[0], item.Position[1] - 10]
                 if item.Position[1] < 0 : #Holala j'ai faillit faire un mémory leak en l'oubliant !!
+                    self.Projectile.remove(item)
+                kill = item.hitbox1(self.Canevas, [self.Aliens1, self.Aliens2[0], self.Aliens2[1], self.Aliens3[0], self.Aliens3[1]])
+                if kill == True:
                     self.Projectile.remove(item)
                 item.afficher(self.Window, self.Canevas)
                 
@@ -124,4 +128,14 @@ class EntitéJoueur(Entité):
 class EntitéTirJoueur(Entité):        
     def afficher(self, pWindow, pCanevas):
         self.PixelArt = PhotoImage(master=pWindow, file='PixelArts/' + self.Frame1)
-        pCanevas.create_image(self.Position[0], self.Position[1], image=self.PixelArt)   
+        pCanevas.create_image(self.Position[0], self.Position[1], image=self.PixelArt)
+        
+    def hitbox1(self, pCanevas, pListeDesEnnemis):
+        #collision = pCanevas.find_overlapping(self.Position[0]-5, self.Position[1]-5, self.Position[0]+5, self.Position[1]+5)
+        for i,item in enumerate(pListeDesEnnemis): #Pour chacune des lignes
+            for j,ennemi in enumerate(item):
+                distance = math.sqrt((ennemi.Position[0]-self.Position[0]) ** 2 + (ennemi.Position[1]-self.Position[1]) ** 2 )
+                if distance <= 10 : 
+                    item.remove(ennemi)
+                    return True
+        return False        
