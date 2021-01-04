@@ -43,10 +43,14 @@ class Game:
 
     def createSpecialEntities(self):
         self.Aliens4 = EntitéEnnemiSpeciale([50, 20], 'Alien_4.gif')
-    
+
+    def createProtection(self):
+        self.Protect = [EntitéProtection([50 + i*120,200],'Protection.gif') for i in range(4)]
+        print('procte')
     def clock_update(self, pFrame):
         self.Joueur.afficher(self.Window, self.Canevas)
-        
+        self.Protect.afficherProtection(self.Window, self.Canevas)
+
         for item in self.Aliens1:
             item.afficher(self.Window, self.Canevas, pFrame)
             
@@ -85,7 +89,10 @@ class Game:
             for i,item in enumerate(liste):
                 item.sliding(self.direction,self.NouvelleDirection)
                 
-        self.direction = self.NouvelleDirection 
+        self.direction = self.NouvelleDirection
+
+    # def protection_update(self):
+
             
     def ActionJoueur(self, event):
         pKey = event.keysym
@@ -130,7 +137,11 @@ class EntitéEnnemiSpeciale(Entité) :
         for i in range(0,20):
             pCanevas.create_image(50 + pX * i, 20, image=self.PixelArt)
 
-    
+class EntitéProtection(Entité):
+    def afficherProtection(self, pWindow, pCanevas):
+        self.PixelArt = PhotoImage(master=pWindow, file='PixelArts/' + self.Frame1)
+        pCanevas.create_image(self.Position[0], self.Position[1], image=self.PixelArt)
+
 class EntitéJoueur(Entité):
     def Mouvement(self, pKey):
         if pKey == "Right" and self.Position[0] < 600:
@@ -142,7 +153,8 @@ class EntitéJoueur(Entité):
         self.PixelArt = PhotoImage(master=pWindow, file='PixelArts/' + self.Frame1)
         pCanevas.create_image(self.Position[0], self.Position[1], image=self.PixelArt)
         #Else
-        
+
+
 class EntitéTirJoueur(Entité):        
     def afficher(self, pWindow, pCanevas):
         self.PixelArt = PhotoImage(master=pWindow, file='PixelArts/' + self.Frame1)
