@@ -109,14 +109,13 @@ while Partie.Vie != 0:
         frame = abs((math.floor(clock*(Partie.difficulte/2))) % - 2)
         if frame != frame_buffer :
             Partie.position_ennemis_update()  
+            Partie.fTirsEnnemi()
         frame_buffer = frame
         Partie.clock_update(frame,clock)
-        
-        myScore.set('SCORE : {} (Record : {})'.format(str(Partie.Score), Partie.TopScore))
-        stayLife.set('VIES : '  + str(Partie.Vie))
-        
+        myScore.set('SCORE : {} (Record : {})'.format(str(Partie.Score), Partie.TopScore))   
         #print("--- %s seconds ---" % (time.time() - InitframeTime))
         frameTime = time.time() - InitframeTime
+        stayLife.set('VIES : '  + str(round(1/frameTime))) # str(Partie.Vie))
         if frameTime < 0.03333:
             time.sleep(0.03333 - frameTime)
             #print("wait a minute")
