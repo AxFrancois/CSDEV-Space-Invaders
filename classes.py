@@ -77,11 +77,12 @@ class Game:
         self.Niveau = 1
         self.Window = pWindow
         self.Canevas = pCanevas
-        self.TopScore = open('HighScore.txt', 'r')
+        self.texteFile = 'HighScore.txt'
+        self.TopScore = open(self.texteFile, 'r').read().replace('\n', '')
+            
         self.createEntities()
         self.Projectile = []
         self.direction = "r"
-        self.spawnDelay = 4
         self.createProtection()
         self.RandomTimer = random.randint(5,10)
         self.difficulte = 1
@@ -94,20 +95,15 @@ class Game:
         for liste in listeEnnemis:
             if len(liste) != 0:
                 IsEmpty = False
-        
-        if IsEmpty == True:
-            valren = True
-        else:
-            valren = False
             
-        return valren 
+        return IsEmpty 
     
     def PlayAgain(self, pNiveau):
         if self.Vie < 3:
             self.Vie += 1
-        
         self.Score += 1000
         
+        self.RandomTimer = random.randint(5,10)
         self.difficulte = pNiveau
         self.Projectile = []
         self.direction = "r"
@@ -156,7 +152,7 @@ class Game:
             l'image d'un ennemi.
             
         pTimer : float
-            Valeur du temps depuis le début du jeu
+            Valeur du temps depuis le début du niveau
 
         Returns
         -------
@@ -165,6 +161,8 @@ class Game:
         """        
         
         self.Joueur.afficher(self.Window, self.Canevas)
+        
+        """tir ennemi"""
         
         for item in self.Protect:
             item.afficherProtection(self.Window, self.Canevas)
@@ -199,12 +197,12 @@ class Game:
                 item.Position = [item.Position[0], item.Position[1] - 10]
                 if item.Position[1] < 0 : #Holala j'ai faillit faire un mémory leak en l'oubliant !!
                     self.Projectile.remove(item)
-                kill = item.hitbox1([self.Aliens1, self.Aliens2[0],
+                kill,points = item.hitbox1([self.Aliens1, self.Aliens2[0],
                                      self.Aliens2[1], self.Aliens3[0],
                                      self.Aliens3[1], self.AliensRouge])
                 if kill == True:
                     self.Projectile.remove(item)
-                    self.Score += 10
+                    self.Score += points
                 item.afficher(self.Window, self.Canevas)            
         
 
@@ -519,5 +517,15 @@ class EntitéTirJoueur(Entité):
                                      (ennemi.Position[1]-self.Position[1]) ** 2 )
                 if distance <= 10 : 
                     item.remove(ennemi)
-                    return True
-        return False
+                    
+                    if i == 0:
+                        Points = 40
+                    elif i == 1 or i == 2:
+                        Points = 20
+                    elif i == 3 or i == 4:
+                        Points = 10
+                    elif i == 5:
+                        Points = random.choice([50,100,150,200])
+                        
+                    return True, Points
+        return False, None
