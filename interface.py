@@ -87,7 +87,7 @@ TextId = Canevas.create_text(320,300, font = ("Terminal", 20), text = texte, fil
 # %%----------------------Boucle principale-----------------------------------#
 
 while Partie.Vie != 0:
-    #try:
+    try:
         """
         if TextId != None and frame_buffer != 0:
             time.sleep(2)
@@ -115,12 +115,20 @@ while Partie.Vie != 0:
         myScore.set('SCORE : {} (Record : {})'.format(str(Partie.Score), Partie.TopScore))   
         #print("--- %s seconds ---" % (time.time() - InitframeTime))
         frameTime = time.time() - InitframeTime
-        stayLife.set('VIES : '  + str(round(1/frameTime))) # str(Partie.Vie))
+        stayLife.set('VIES : '  + str(Partie.Vie)) #str(round(1/frameTime))) # str(Partie.Vie))
         if frameTime < 0.03333:
             time.sleep(0.03333 - frameTime)
             #print("wait a minute")
         window.update()
-    #except:
-    #    if int(Partie.Score) > int(Partie.TopScore):
-    #        open(Partie.texteFile, 'w').write(str(Partie.Score))
-    #    break
+    except:
+        break
+    
+Canevas.delete("all")
+texte1 = "Game Over ! Vous etes mort au niveau {}. Votre score est de {}.".format(niveau,str(Partie.Score))
+texte2 = "Appuyez sur New Game pour relancer"
+TextId1 = Canevas.create_text(320,300, font = ("Terminal", 20), text = texte1, fill = '#FFFFFF')
+TextId2 = Canevas.create_text(340,330, font = ("Terminal", 20), text = texte2, fill = '#FFFFFF')
+window.mainloop()
+"""
+    if int(Partie.Score) > int(Partie.TopScore):
+            open(Partie.texteFile, 'w').write(str(Partie.Score))"""

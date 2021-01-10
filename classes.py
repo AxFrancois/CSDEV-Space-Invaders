@@ -11,6 +11,7 @@ github : https://github.com/AxFrancois/Space-Invaders
 from tkinter import *
 import math
 import random
+import time
 
 # %%----------------------Fonctions-------------------------------------------#
 
@@ -85,6 +86,7 @@ class Game:
         self.createProtection()
         self.RandomTimer = random.randint(5,10)
         self.difficulte = 1
+        self.Pause = False
     
     def OnAGagneChef(self):
         """
@@ -124,7 +126,7 @@ class Game:
             self.Vie += 1
         self.Score += 1000
         
-        self.RandomTimer = random.randint(5,10)
+        self.RandomTimer = random.randint(10,20)
         self.difficulte = pNiveau
         self.Projectile = []
         self.direction = "r"
@@ -203,14 +205,8 @@ class Game:
         None.
 
         """
-        #  self.Canevas.delete("all")
-        self.Joueur.afficher(self.Window, self.Canevas)     
-        """
-        for item in self.Protect:
-            item.afficherProtection(self.Window, self.Canevas)
-        """
         if pTimer >= self.RandomTimer:
-            self.RandomTimer += random.randint(20,30)
+            self.RandomTimer += random.randint(15,25)
             self.directionRouge = random.choice(['r','l'])
             self.createSpecialEntities(self.directionRouge)
             
@@ -229,10 +225,9 @@ class Game:
         for k,liste in enumerate(self.Aliens3):
             for i,item in enumerate(liste):
                 item.afficherClassique(self.Window, self.Canevas, pFrame)
-        
 
         for item in self.Projectile:
-            """projectiles du joueur -> dégat aux aliens et aux protections"""
+            """projectiles du joueur -> dégat aux aliens"""
             if isinstance(item, EntitéTirJoueur):
                 item.Position = [item.Position[0], item.Position[1] - 10]
                 if item.Position[1] < 0 : #Holala j'ai faillit faire un mémory leak en l'oubliant !!
@@ -244,19 +239,30 @@ class Game:
                     self.Projectile.remove(item)
                     self.Score += points
                 item.afficher(self.Window, self.Canevas)
-            """projectiles des aliens -> dégat au joueur et aux protections"""    
+            """projectiles des aliens -> dégat au joueur"""    
             if isinstance(item, EntitéTirEnnemi):
                 item.Position = [item.Position[0], item.Position[1] + 7]
+                tué = item.hitbox2(self.Joueur.Position, item.Position)
+                if tué == True:
+                    self.Vie = self.Vie - 1
+                    self.Pause = True
+                    self.Joueur.afficherMort(self.Window, self.Canevas, self.Pause)
+                    debutPause = time.time()
+                    while time.time() - debutPause < 3:
+                        self.Window.update()
+                    self.Pause = False
+                    self.Joueur.afficherMort(self.Window, self.Canevas, self.Pause)
+                    self.Projectile = []
+                    
                 if item.Position[1] % 2 == 0:
                     self.Alternateur = 1
                 else:
                     self.Alternateur = 2
                 item.afficher(self.Window, self.Canevas, self.Alternateur)
-                self.Canevas.move(item.imageOnCanvas, 0, 7) 
+                self.Canevas.move(item.imageOnCanvas, 0, 7)
                 if item.Position[1] > 500 : 
                     self.Projectile.remove(item)
-                    
-        for item in self.Projectile:
+            """tous les projectiles :  dégats aux protections"""         
             for defense in self.Protect:
                 ADetruit = defense.ProtectionDestruction(item.Position)
                 if ADetruit == True:
@@ -281,13 +287,19 @@ class Game:
                                                 self.Aliens3[1]],self.direction)
         
         for item in self.Aliens1:
+            if item.Position[1] > 420 :
+                self.Vie = 0
             item.slidingClassique(self.direction,self.NouvelleDirection, self.Canevas)
             
         for k,liste in enumerate(self.Aliens2):
+            if liste[0].Position[1] > 420 :
+                self.Vie = 0
             for i,item in enumerate(liste):
                 item.slidingClassique(self.direction,self.NouvelleDirection, self.Canevas)
         
         for k,liste in enumerate(self.Aliens3):
+            if liste[0].Position[1] > 420 :
+                self.Vie = 0
             for i,item in enumerate(liste):
                 item.slidingClassique(self.direction,self.NouvelleDirection, self.Canevas)
                 
@@ -318,10 +330,10 @@ class Game:
                                                    'Projectile_joueur.gif', 
                                                    self.Window, self.Canevas))
         elif pKey == "Right" or pKey == "Left":
-            self.Joueur.Mouvement(pKey)
+            self.Joueur.Mouvement(pKey, self.Canevas )
 
     def fTirsEnnemi(self):
-        NombreTir = random.randint(self.difficulte - 1, self.difficulte + 3)
+        NombreTir = random.randint(0, 4)
         
         listeEnnemis = [self.Aliens1, self.Aliens2[0], self.Aliens2[1], 
                         self.Aliens3[0], self.Aliens3[1]]
@@ -469,7 +481,7 @@ class EntitéEnnemiSpecial(Entité) :
             pCanevas.move(self.imageOnCanvas, -5, 0) 
             self.Position = [self.Position[0] - 5, self.Position[1]]
         
-class Protection:#TO DO
+class Protection:
 
     def __init__(self, pCoordonne, pWindow, pCanevas):
         self.Position = pCoordonne
@@ -499,8 +511,6 @@ class Protection:#TO DO
                 pCanevas.delete(element.imageOnCanvas)
             else:
                 element.AffichageBloc(pWindow, pCanevas)
-            
-                
             
 class EntitéPartieProtection(Entité):
     def __init__(self, pCoordonne, pNumero, pWindow, pCanevas):
@@ -537,7 +547,7 @@ class EntitéPartieProtection(Entité):
 class EntitéJoueur(Entité):
     """Sous-classe pour le joueur"""
     
-    def Mouvement(self, pKey):
+    def Mouvement(self, pKey,pCanevas):
         """
         Méthode pour le déplacement du joueur. Le parametre pKey est la touche pressé sur le clavier.  
 
@@ -553,10 +563,12 @@ class EntitéJoueur(Entité):
         """
         if pKey == "Right" and self.Position[0] < 630:
             self.Position[0] += 10
+            pCanevas.move(self.imageOnCanvas, 10, 0)
         elif pKey == "Left" and self.Position[0] > 30:
             self.Position[0] -= 10            
-
-    def afficher(self, pWindow, pCanevas):
+            pCanevas.move(self.imageOnCanvas, -10, 0)
+            
+    def afficherMort(self, pWindow, pCanevas, pPause):
         """
         Méthode d'affichage du joueur. Les parametres pWindow et pCanevas sont 
         respectivement la fenêtre et le canvas.
@@ -573,12 +585,15 @@ class EntitéJoueur(Entité):
         None.
 
         """
-        #If player pas mort
-        self.PixelArt = PhotoImage(master = pWindow,
-                                   file = 'PixelArts/' + self.Frame1)
-        pCanevas.create_image(self.Position[0], self.Position[1],
-                              image = self.PixelArt)
-        #Else
+        if pPause == True:
+            self.PixelArt = PhotoImage(master = pWindow,
+                                       file = 'PixelArts/' + self.Frame2)
+            pCanevas.itemconfig(self.imageOnCanvas, image = self.PixelArt)
+        else:
+            self.PixelArt = PhotoImage(master = pWindow,
+                                       file = 'PixelArts/' + self.Frame1)
+            pCanevas.itemconfig(self.imageOnCanvas, image = self.PixelArt)
+            
 
 
 class EntitéTirJoueur(Entité):        
@@ -669,7 +684,7 @@ class EntitéTirEnnemi(Entité):
             self.PixelArt = PhotoImage(master = pWindow, file = 'PixelArts/' + self.Frame2)
         pCanevas.itemconfig(self.imageOnCanvas, image = self.PixelArt)
     
-    def hitbox2(self, pListeDesEnnemis):
+    def hitbox2(self, pPositionJoueur, pTirPosition):
         """
         Méthode pour la détection des hitboxs. Le parametre pListeDesEnnemis 
         est une liste dont chaque élément est une liste contenant tous les 
@@ -687,23 +702,12 @@ class EntitéTirEnnemi(Entité):
                                                                    supprimer)
 
         """        
-        for i,item in enumerate(pListeDesEnnemis): #Pour chacune des lignes
-            for j,ennemi in enumerate(item):
-                distance = math.sqrt((ennemi.Position[0]-self.Position[0]) ** 2 +
-                                     (ennemi.Position[1]-self.Position[1]) ** 2 )
-                if distance <= 10 : 
-                    item.remove(ennemi)
-                    
-                    if i == 0:
-                        Points = 40
-                    elif i in [1,2]:
-                        Points = 20
-                    elif i in [3,4]:
-                        Points = 10
-                    elif i == 5:
-                        Points = random.choice([50,100,150,200])
-                        
-                    return True, Points
-        return False, None
+        
+        distance = math.sqrt((pPositionJoueur[0]-pTirPosition[0]) ** 2 +
+                             (pPositionJoueur[1]-pTirPosition[1]) ** 2 )
+        if distance <= 25 : 
+            return True
+        else:
+            return False
     
     

@@ -5,9 +5,7 @@
 Project for CS-DEV's courses for CPE Lyon
 
 ## TO DO : 
-* tir ennemi
-    * dégat joueur
 * explosions
-* Degat de scroll
 * Texte d'accueil
-* score final
+* score final 50%
+* séparation en fichier individuels
