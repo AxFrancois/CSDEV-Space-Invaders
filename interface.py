@@ -23,7 +23,7 @@ def key_pressed(event):
 window = Tk()
 
 window.title('Space invaders')
-width = 750
+width = 825
 height = 500
 #on centre la fenêtre sur l'écran
 widthScreen = window.winfo_screenwidth()
@@ -87,7 +87,7 @@ TextId = Canevas.create_text(320,300, font = ("Terminal", 20), text = texte, fil
 # %%----------------------Boucle principale-----------------------------------#
 
 while Partie.Vie != 0:
-    try:
+    #try:
         """
         if TextId != None and frame_buffer != 0:
             time.sleep(2)
@@ -106,7 +106,7 @@ while Partie.Vie != 0:
         InitframeTime = time.time()
         clock = InitframeTime  - start_time
         window.bind("<Key>", Partie.ActionJoueur)
-        frame = abs((math.floor(clock*(Partie.difficulte/2))) % - 2)
+        frame = abs((math.floor(clock*(Partie.difficulte/3))) % - 2)
         if frame != frame_buffer :
             Partie.position_ennemis_update()  
             Partie.fTirsEnnemi()
@@ -120,7 +120,7 @@ while Partie.Vie != 0:
             time.sleep(0.03333 - frameTime)
             #print("wait a minute")
         window.update()
-    except:
-        if int(Partie.Score) > int(Partie.TopScore):
-            open(Partie.texteFile, 'w').write(str(Partie.Score))
-        break
+    #except:
+    #    if int(Partie.Score) > int(Partie.TopScore):
+    #        open(Partie.texteFile, 'w').write(str(Partie.Score))
+    #    break

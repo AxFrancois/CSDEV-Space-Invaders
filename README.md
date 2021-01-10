@@ -4,11 +4,10 @@
 
 Project for CS-DEV's courses for CPE Lyon
 
-####TO DO : 
-*protection
+##TO DO : 
 *tir ennemi
-	*degat joueur
-	*animation
+    *degat joueur
 *explosions
 *Degat de scroll
 *Texte d'accueil
+*score final
