@@ -84,8 +84,7 @@ class Game:
         self.Projectile = []
         self.direction = "r"
         self.createProtection()
-        self.RandomTimer = random.randint(5,10)
-        self.difficulte = 1
+        self.RandomTimer = random.randint(15,20)
         self.Pause = False
     
     def OnAGagneChef(self):
@@ -108,29 +107,17 @@ class Game:
             
         return IsEmpty 
     
-    def PlayAgain(self, pNiveau):
-        """
-        
-
-        Parameters
-        ----------
-        pNiveau : TYPE
-            DESCRIPTION.
-
-        Returns
-        -------
-        None.
-
-        """
+    def LevelUp(self):
         if self.Vie < 3:
             self.Vie += 1
         self.Score += 1000
         
-        self.RandomTimer = random.randint(10,20)
-        self.difficulte = pNiveau
+        self.RandomTimer = random.randint(15,25)
+        self.Niveau += 1
         self.Projectile = []
         self.direction = "r"
         self.createEntities()
+        self.Pause = True
                  
     def createEntities(self):
         """
@@ -205,72 +192,73 @@ class Game:
         None.
 
         """
-        if pTimer >= self.RandomTimer:
-            self.RandomTimer += random.randint(15,25)
-            self.directionRouge = random.choice(['r','l'])
-            self.createSpecialEntities(self.directionRouge)
-            
-        for item in self.AliensRouge:
-            item.slidingSpecial(self.directionRouge, self.Canevas)
-            if item.Position[0] < 0 or item.Position[0] > 700:
-                self.AliensRouge.remove(item)
-    
-        for item in self.Aliens1:
-            item.afficherClassique(self.Window, self.Canevas, pFrame)
-            
-        for k,liste in enumerate(self.Aliens2):
-            for i,item in enumerate(liste):
-                item.afficherClassique(self.Window, self.Canevas, pFrame)
-        
-        for k,liste in enumerate(self.Aliens3):
-            for i,item in enumerate(liste):
-                item.afficherClassique(self.Window, self.Canevas, pFrame)
-
-        for item in self.Projectile:
-            """projectiles du joueur -> dégat aux aliens"""
-            if isinstance(item, EntitéTirJoueur):
-                item.Position = [item.Position[0], item.Position[1] - 10]
-                if item.Position[1] < 0 : #Holala j'ai faillit faire un mémory leak en l'oubliant !!
-                    self.Projectile.remove(item)
-                kill,points = item.hitbox1([self.Aliens1, self.Aliens2[0], 
-                                            self.Aliens2[1], self.Aliens3[0], 
-                                            self.Aliens3[1], self.AliensRouge])
-                if kill == True:
-                    self.Projectile.remove(item)
-                    self.Score += points
-                item.afficher(self.Window, self.Canevas)
-            """projectiles des aliens -> dégat au joueur"""    
-            if isinstance(item, EntitéTirEnnemi):
-                item.Position = [item.Position[0], item.Position[1] + 7]
-                tué = item.hitbox2(self.Joueur.Position, item.Position)
-                if tué == True:
-                    self.Vie = self.Vie - 1
-                    self.Pause = True
-                    self.Joueur.afficherMort(self.Window, self.Canevas, self.Pause)
-                    debutPause = time.time()
-                    while time.time() - debutPause < 3:
-                        self.Window.update()
-                    self.Pause = False
-                    self.Joueur.afficherMort(self.Window, self.Canevas, self.Pause)
-                    self.Projectile = []
-                    
-                if item.Position[1] % 2 == 0:
-                    self.Alternateur = 1
-                else:
-                    self.Alternateur = 2
-                item.afficher(self.Window, self.Canevas, self.Alternateur)
-                self.Canevas.move(item.imageOnCanvas, 0, 7)
-                if item.Position[1] > 500 : 
-                    self.Projectile.remove(item)
-            """tous les projectiles :  dégats aux protections"""         
-            for defense in self.Protect:
-                ADetruit = defense.ProtectionDestruction(item.Position)
-                if ADetruit == True:
-                    self.Projectile.remove(item)
-                    break
+        if self.Pause == False:
+            if pTimer >= self.RandomTimer:
+                self.RandomTimer += random.randint(15,25)
+                self.directionRouge = random.choice(['r','l'])
+                self.createSpecialEntities(self.directionRouge)
                 
-        for item in self.Protect:
-            item.affichageProtection(self.Window, self.Canevas)
+            for item in self.AliensRouge:
+                item.slidingSpecial(self.directionRouge, self.Canevas)
+                if item.Position[0] < 0 or item.Position[0] > 700:
+                    self.AliensRouge.remove(item)
+        
+            for item in self.Aliens1:
+                item.afficherClassique(self.Window, self.Canevas, pFrame)
+                
+            for k,liste in enumerate(self.Aliens2):
+                for i,item in enumerate(liste):
+                    item.afficherClassique(self.Window, self.Canevas, pFrame)
+            
+            for k,liste in enumerate(self.Aliens3):
+                for i,item in enumerate(liste):
+                    item.afficherClassique(self.Window, self.Canevas, pFrame)
+    
+            for item in self.Projectile:
+                """projectiles du joueur -> dégat aux aliens"""
+                if isinstance(item, EntitéTirJoueur):
+                    item.Position = [item.Position[0], item.Position[1] - 10]
+                    if item.Position[1] < 0 : #Holala j'ai faillit faire un mémory leak en l'oubliant !!
+                        self.Projectile.remove(item)
+                    kill,points = item.hitbox1([self.Aliens1, self.Aliens2[0], 
+                                                self.Aliens2[1], self.Aliens3[0], 
+                                                self.Aliens3[1], self.AliensRouge])
+                    if kill == True:
+                        self.Projectile.remove(item)
+                        self.Score += points
+                    item.afficher(self.Window, self.Canevas)
+                """projectiles des aliens -> dégat au joueur"""    
+                if isinstance(item, EntitéTirEnnemi):
+                    item.Position = [item.Position[0], item.Position[1] + 7]
+                    tué = item.hitbox2(self.Joueur.Position, item.Position)
+                    if tué == True:
+                        self.Vie = self.Vie - 1
+                        self.Pause = True
+                        self.Joueur.afficherMort(self.Window, self.Canevas, self.Pause)
+                        debutPause = time.time()
+                        while time.time() - debutPause < 3:
+                            self.Window.update()
+                        self.Pause = False
+                        self.Joueur.afficherMort(self.Window, self.Canevas, self.Pause)
+                        self.Projectile = []
+                        
+                    if item.Position[1] % 2 == 0:
+                        self.Alternateur = 1
+                    else:
+                        self.Alternateur = 2
+                    item.afficher(self.Window, self.Canevas, self.Alternateur)
+                    self.Canevas.move(item.imageOnCanvas, 0, 7)
+                    if item.Position[1] > 500 : 
+                        self.Projectile.remove(item)
+                """tous les projectiles :  dégats aux protections"""         
+                for defense in self.Protect:
+                    ADetruit = defense.ProtectionDestruction(item.Position)
+                    if ADetruit == True:
+                        self.Projectile.remove(item)
+                        break
+                    
+            for item in self.Protect:
+                item.affichageProtection(self.Window, self.Canevas)
             
     def position_ennemis_update(self):
         """
@@ -281,29 +269,32 @@ class Game:
         None.
 
         """
-        
-        self.NouvelleDirection = fAuBoutDuBout([self.Aliens1, self.Aliens2[0], 
-                                                self.Aliens2[1], self.Aliens3[0],
-                                                self.Aliens3[1]],self.direction)
-        
-        for item in self.Aliens1:
-            if item.Position[1] > 420 :
-                self.Vie = 0
-            item.slidingClassique(self.direction,self.NouvelleDirection, self.Canevas)
+        if self.Pause == False:
+            self.NouvelleDirection = fAuBoutDuBout([self.Aliens1, self.Aliens2[0], 
+                                                    self.Aliens2[1], self.Aliens3[0],
+                                                    self.Aliens3[1]],self.direction)
             
-        for k,liste in enumerate(self.Aliens2):
-            if liste[0].Position[1] > 420 :
-                self.Vie = 0
-            for i,item in enumerate(liste):
-                item.slidingClassique(self.direction,self.NouvelleDirection, self.Canevas)
-        
-        for k,liste in enumerate(self.Aliens3):
-            if liste[0].Position[1] > 420 :
-                self.Vie = 0
-            for i,item in enumerate(liste):
-                item.slidingClassique(self.direction,self.NouvelleDirection, self.Canevas)
+            for item in self.Aliens1:
+                if len(self.Aliens1) != 0 :
+                    if item.Position[1] > 420 :
+                        self.Vie = 0
+                    item.slidingClassique(self.direction,self.NouvelleDirection, self.Canevas)
                 
-        self.direction = self.NouvelleDirection
+            for k,liste in enumerate(self.Aliens2):
+                if len(liste) != 0 :
+                    if liste[0].Position[1] > 420 :
+                        self.Vie = 0
+                    for i,item in enumerate(liste):
+                        item.slidingClassique(self.direction,self.NouvelleDirection, self.Canevas)
+                
+            for k,liste in enumerate(self.Aliens3):
+                if len(liste) != 0 :
+                    if liste[0].Position[1] > 420 :
+                        self.Vie = 0
+                    for i,item in enumerate(liste):
+                        item.slidingClassique(self.direction,self.NouvelleDirection, self.Canevas)
+                    
+            self.direction = self.NouvelleDirection
 
             
     def ActionJoueur(self, event):
@@ -322,15 +313,15 @@ class Game:
         None.
 
         """
-        
-        pKey = event.keysym
-        if pKey == "space":
-            self.Projectile.append(EntitéTirJoueur([self.Joueur.getPos()[0], 
-                                                    self.Joueur.getPos()[1] - 10],
-                                                   'Projectile_joueur.gif', 
-                                                   self.Window, self.Canevas))
-        elif pKey == "Right" or pKey == "Left":
-            self.Joueur.Mouvement(pKey, self.Canevas )
+        if self.Pause == False:
+            pKey = event.keysym
+            if pKey == "space":
+                self.Projectile.append(EntitéTirJoueur([self.Joueur.getPos()[0], 
+                                                        self.Joueur.getPos()[1] - 10],
+                                                       'Projectile_joueur.gif', 
+                                                       self.Window, self.Canevas))
+            elif pKey == "Right" or pKey == "Left":
+                self.Joueur.Mouvement(pKey, self.Canevas )
 
     def fTirsEnnemi(self):
         NombreTir = random.randint(0, 4)

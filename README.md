@@ -6,6 +6,9 @@ Project for CS-DEV's courses for CPE Lyon
 
 ## TO DO : 
 * explosions
-* Texte d'accueil
-* score final 50%
 * séparation en fichier individuels
+
+### Problèmes connus :
+- [x] On peut bouger et tirer quand on est mort
+- [ ] Rejouer ne fonctionne pas
+- [x] Vie négative
