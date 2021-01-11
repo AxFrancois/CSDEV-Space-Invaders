@@ -9,6 +9,4 @@ Project for CS-DEV's courses for CPE Lyon
 * séparation en fichier individuels
 
 ### Problèmes connus :
-- [x] On peut bouger et tirer quand on est mort
-- [ ] Rejouer ne fonctionne pas
-- [x] Vie négative
+Aucun
