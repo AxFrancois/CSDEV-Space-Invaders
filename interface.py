@@ -68,7 +68,14 @@ class main:
                             command = self.window.destroy)
         quitButton.grid(row = 1, column = 0, pady = (50, 0), padx = (20, 0))
     
-    
+        menuBar = Menu(self.window)
+        menuGame = Menu(menuBar, tearoff=0)
+        menuGame.add_command(label="Rejouer", command=self.restart)
+        menuGame.add_command(label="Quitter", command=self.window.destroy)
+        menuGame.add_command(label="A propos", command="")
+        menuBar.add_cascade(label="Jeux", menu=menuGame)
+        self.window.config(menu=menuBar)
+
     # %%----------------------Initialisations-------------------------------------#
     
         Partie = cl.Game(self.window,Canevas)
