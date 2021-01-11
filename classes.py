@@ -25,7 +25,7 @@ def fAuBoutDuBout(pListeDesEnnemis, pDirectionPrecedente):
 
     Parameters
     ----------
-    pListeDesEnnemis : Liste de Liste de d'élement EntitéEnnemiClassique
+    pListeDesEnnemis : Liste de Liste de d'élement EntityEnnemiClassique
         Liste des ennemis en jeu
     pDirectionPrecedente : String
         'l' ou 'r', ancienne direction (permet de faire une direction par 
@@ -86,6 +86,7 @@ class Game:
         self.createProtection()
         self.RandomTimer = random.randint(15,20)
         self.Pause = False
+
     
     def OnAGagneChef(self):
         """
@@ -132,7 +133,7 @@ class Game:
                  
     def createEntities(self):
         """
-        Méthode qui créée les entités du jeu, à savoir les ennemis et le 
+        Méthode qui créée les Entitys du jeu, à savoir les ennemis et le 
         joueur
 
         Returns
@@ -141,18 +142,18 @@ class Game:
 
         """
         
-        self.Joueur = EntitéJoueur([330, 450],'Player.gif', self.Window, self.Canevas,'Player_mort.gif')
-        self.Aliens1 = [EntitéEnnemiClassique([50 + i*40,50],
+        self.Joueur = EntityJoueur([330, 450],'Player.gif', self.Window, self.Canevas,'Player_mort.gif')
+        self.Aliens1 = [EntityEnnemiClassique([50 + i*40,50],
                         'Alien_1_frame1.gif', self.Window, self.Canevas, 'Alien_1_frame2.gif') for i in range(11)]
-        self.Aliens2 = [[EntitéEnnemiClassique([50 + i*40, 70 + j*20],
+        self.Aliens2 = [[EntityEnnemiClassique([50 + i*40, 70 + j*20],
                         'Alien_2_frame1.gif', self.Window, self.Canevas,'Alien_2_frame2.gif') for i in range(11)] for j in range(2)]
-        self.Aliens3 = [[EntitéEnnemiClassique([50 + i*40, 110 + j*20],
+        self.Aliens3 = [[EntityEnnemiClassique([50 + i*40, 110 + j*20],
                         'Alien_3_frame1.gif', self.Window, self.Canevas,'Alien_3_frame2.gif') for i in range(11)] for j in range(2)]
         self.AliensRouge = []   #On créé une liste vide car c'est plus simple pour la manipulation.
 
     def createSpecialEntities(self, pdirectionRouge):
         """
-        Méthode qui permet de créer l'ennemi spécial grâce à la classe EntitéEnnemiSpecial.
+        Méthode qui permet de créer l'ennemi spécial grâce à la classe EntityEnnemiSpecial.
 
         Parameters
         ----------
@@ -169,7 +170,7 @@ class Game:
             Coordonnee = [0,30]
         elif pdirectionRouge == 'l':
             Coordonnee = [700,30]
-        self.AliensRouge = [EntitéEnnemiSpecial(Coordonnee, 'Alien_4.gif', self.Window, self.Canevas)]
+        self.AliensRouge = [EntityEnnemiSpecial(Coordonnee, 'Alien_4.gif', self.Window, self.Canevas)]
 
     def createProtection(self):
         """
@@ -185,7 +186,7 @@ class Game:
 
     def clock_update(self, pFrame, pTimer):
         """
-        Méthode qui affiche les entités du jeu et gére les projectiles. Le 
+        Méthode qui affiche les Entitys du jeu et gére les projectiles. Le 
         parametre pFrame, qui vaut 0 ou 1, indique s'il faut déplacer et 
         changer l'image des aliens.
 
@@ -228,7 +229,7 @@ class Game:
     
             for item in self.Projectile:    #Pour tout les calculs de projectile
                 """projectiles du joueur -> dégat aux aliens"""
-                if isinstance(item, EntitéTirJoueur):
+                if isinstance(item, EntityTirJoueur):
                     item.Position = [item.Position[0], item.Position[1] - 10]
                     if item.Position[1] < 0 : #Holala j'ai faillit faire un mémory leak en l'oubliant !!
                         self.Projectile.remove(item)
@@ -238,9 +239,11 @@ class Game:
                     if kill == True:
                         self.Projectile.remove(item)    #Si c'est le cas on l'enlève
                         self.Score += points
+
                     item.afficherTirJoueur(self.Window, self.Canevas)
+
                 """projectiles des aliens -> dégat au joueur"""    
-                if isinstance(item, EntitéTirEnnemi):
+                if isinstance(item, EntityTirEnnemi):
                     item.Position = [item.Position[0], item.Position[1] + 7]
                     tué = item.hitbox2(self.Joueur.Position, item.Position)
                     if tué == True:
@@ -330,7 +333,7 @@ class Game:
         if self.Pause == False:
             pKey = event.keysym
             if pKey == "space":
-                self.Projectile.append(EntitéTirJoueur([self.Joueur.getPos()[0], 
+                self.Projectile.append(EntityTirJoueur([self.Joueur.getPos()[0], 
                                                         self.Joueur.getPos()[1] - 10],
                                                        'Projectile_joueur.gif', 
                                                        self.Window, self.Canevas))
@@ -350,33 +353,34 @@ class Game:
                 PositionTir = listeEnnemis[LigneTir][EnnemiTir].getPos()
                 TypeProjectile = random.randint(1,2)
                 if TypeProjectile == 1:
-                    self.Projectile.append(EntitéTirEnnemi([PositionTir[0], PositionTir[1] + 10], 'Projectile_alien1_frame1.gif', self.Window, self.Canevas, 'Projectile_alien1_frame2.gif'))
+                    self.Projectile.append(EntityTirEnnemi([PositionTir[0], PositionTir[1] + 10], 'Projectile_alien1_frame1.gif', self.Window, self.Canevas, 'Projectile_alien1_frame2.gif'))
                 else:
-                    self.Projectile.append(EntitéTirEnnemi([PositionTir[0], PositionTir[1] + 10], 'Projectile_alien2_frame1.gif', self.Window, self.Canevas, 'Projectile_alien2_frame2.gif'))
-                    
-class Entité:
-    """Classe qui défini toutes les entités du jeu"""
+                    self.Projectile.append(EntityTirEnnemi([PositionTir[0], PositionTir[1] + 10], 'Projectile_alien2_frame1.gif', self.Window, self.Canevas, 'Projectile_alien2_frame2.gif'))
+
+
+class Entity:
+    """Classe qui défini toutes les Entitys du jeu"""
     
     def __init__(self, pPositionInitiale, pImage1, pWindow, pCanevas, pImage2 = None):
         """
-        Méthode de création d'une entité. Elle a pour parametre 
+        Méthode de création d'une Entity. Elle a pour parametre 
         pPositionInitiale, une liste de 2 entiers, pImage1 et pImage2 qui sont 
-        des str et qui indique les images de l'entité.
+        des str et qui indique les images de l'Entity.
         
         Parameters
         ----------
         pPositionInitiale : Liste de taille 2 contenant 2 entiers/int
-            Contient les coordonnées de l'entité. Elle permet de le positionner
+            Contient les coordonnées de l'Entity. Elle permet de le positionner
             sur le canvas.
         pImage1 : String
-            Nom de l'image 1 de l'entité.
+            Nom de l'image 1 de l'Entity.
         pWindow : tkinter window
             Nécessaire pour l'interface graphique. 
         pCanevas : tkinter canevas
             Idem.
         pImage2 : String, optional
-            Nom de l'image 2 de l'entité. Par défaut : None car certaines 
-            entité n'ont qu'une seule image.
+            Nom de l'image 2 de l'Entity. Par défaut : None car certaines 
+            Entity n'ont qu'une seule image.
 
         Returns
         -------
@@ -392,18 +396,18 @@ class Entité:
         
     def getPos(self):
         """
-        Méthode getteur pour récuperer la position de l'entité
+        Méthode getteur pour récuperer la position de l'Entity
 
         Returns
         -------
          Liste de taille 2 contenant 2 entiers/int
-            Coordonnées de l'entité
+            Coordonnées de l'Entity
 
         """
         
         return self.Position
     
-class EntitéEnnemiClassique(Entité):
+class EntityEnnemiClassique(Entity):
     """Sous-classe pour les ennemis classiques"""
     
     def afficherClassique(self, pWindow, pCanevas, pFrame):        
@@ -472,7 +476,7 @@ class EntitéEnnemiClassique(Entité):
             pCanevas.move(self.imageOnCanvas, -20, 0)
             self.Position = [self.Position[0] - 20, self.Position[1]]
             
-class EntitéEnnemiSpecial(Entité) :
+class EntityEnnemiSpecial(Entity) :
     """Sous-classe pour les ennemis speciaux"""
     
     def slidingSpecial(self, pDirection, pCanevas):
@@ -522,14 +526,14 @@ class Protection:
         """
        
         self.Position = pCoordonne
-        self.bloc1 = EntitéPartieProtection([pCoordonne[0], pCoordonne[1] + 23], 1, pWindow, pCanevas)            #Bloc bas gauche
-        self.bloc2 = EntitéPartieProtection([pCoordonne[0] + 43 , pCoordonne[1] + 23], 1, pWindow, pCanevas)      #Bloc bas droite
-        self.bloc3 = EntitéPartieProtection([pCoordonne[0], pCoordonne[1]+6], 2, pWindow, pCanevas)               #Bloc haut gauche
-        self.bloc4 = EntitéPartieProtection([pCoordonne[0] + 43 , pCoordonne[1]+6], 3, pWindow, pCanevas)         #Bloc haut droite
-        self.bloc5 = EntitéPartieProtection([pCoordonne[0] + 15 , pCoordonne[1]], 4, pWindow, pCanevas)           #Bloc milieu haut gauche
-        self.bloc6 = EntitéPartieProtection([pCoordonne[0] + 29 , pCoordonne[1]], 4, pWindow, pCanevas)           #Bloc milieu haut droite
-        self.bloc7 = EntitéPartieProtection([pCoordonne[0] + 15 , pCoordonne[1] + 11], 5, pWindow, pCanevas)      #Bloc milieu bas droite
-        self.bloc8 = EntitéPartieProtection([pCoordonne[0] + 29 , pCoordonne[1] + 11], 6, pWindow, pCanevas)      #Bloc milieu bas gauche
+        self.bloc1 = EntityPartieProtection([pCoordonne[0], pCoordonne[1] + 23], 1, pWindow, pCanevas)            #Bloc bas gauche
+        self.bloc2 = EntityPartieProtection([pCoordonne[0] + 43 , pCoordonne[1] + 23], 1, pWindow, pCanevas)      #Bloc bas droite
+        self.bloc3 = EntityPartieProtection([pCoordonne[0], pCoordonne[1]+6], 2, pWindow, pCanevas)               #Bloc haut gauche
+        self.bloc4 = EntityPartieProtection([pCoordonne[0] + 43 , pCoordonne[1]+6], 3, pWindow, pCanevas)         #Bloc haut droite
+        self.bloc5 = EntityPartieProtection([pCoordonne[0] + 15 , pCoordonne[1]], 4, pWindow, pCanevas)           #Bloc milieu haut gauche
+        self.bloc6 = EntityPartieProtection([pCoordonne[0] + 29 , pCoordonne[1]], 4, pWindow, pCanevas)           #Bloc milieu haut droite
+        self.bloc7 = EntityPartieProtection([pCoordonne[0] + 15 , pCoordonne[1] + 11], 5, pWindow, pCanevas)      #Bloc milieu bas droite
+        self.bloc8 = EntityPartieProtection([pCoordonne[0] + 29 , pCoordonne[1] + 11], 6, pWindow, pCanevas)      #Bloc milieu bas gauche
         self.listeBloc = [self.bloc1, self.bloc2, self.bloc3, self.bloc4, 
                           self.bloc5, self.bloc6, self.bloc7, self.bloc8]
                 
@@ -582,7 +586,7 @@ class Protection:
             else:
                 element.AffichageBloc(pWindow, pCanevas)
             
-class EntitéPartieProtection(Entité):
+class EntityPartieProtection(Entity):
     """Sous classe pour les blocs composant les protections"""
     
     def __init__(self, pCoordonne, pNumero, pWindow, pCanevas):
@@ -651,7 +655,7 @@ class EntitéPartieProtection(Entité):
         pCanevas.itemconfig(self.imageOnCanvas, image = self.PixelArt) 
         
         
-class EntitéJoueur(Entité):
+class EntityJoueur(Entity):
     """Sous-classe pour le joueur"""
     
     def Mouvement(self, pKey,pCanevas):
@@ -706,12 +710,12 @@ class EntitéJoueur(Entité):
             
 
 
-class EntitéTirJoueur(Entité):        
+class EntityTirJoueur(Entity):        
     """Sous-classe pour les tirs du joueur"""
     
     def afficherTirJoueur(self, pWindow, pCanevas):
         """
-        Méthode d'affichage des entités. Les parametres pWindow et pCanevas 
+        Méthode d'affichage des Entitys. Les parametres pWindow et pCanevas 
         sont respectivement la fenêtre et le canvas.
 
         Parameters
@@ -739,7 +743,7 @@ class EntitéTirJoueur(Entité):
 
         Parameters
         ----------
-        pListeDesEnnemis : Liste de Liste de d'élement EntitéEnnemiClassique
+        pListeDesEnnemis : Liste de Liste de d'élement EntityEnnemiClassique
             Liste des ennemis en jeu.
         Returns
         -------
@@ -756,7 +760,7 @@ class EntitéTirJoueur(Entité):
                                      (ennemi.Position[1]-self.Position[1]) ** 2 )
                 if distance <= 10 : 
                     item.remove(ennemi)
-                    
+
                     if i == 0:
                         Points = 40
                     elif i in [1,2]:
@@ -769,11 +773,11 @@ class EntitéTirJoueur(Entité):
                     return True, Points
         return False, 0
     
-class EntitéTirEnnemi(Entité):   
+class EntityTirEnnemi(Entity):   
     """Sous-classe pour les tirs des aliens"""
     def afficherTirEnnemi(self, pWindow, pCanevas, pAlternateur):
         """
-        Méthode d'affichage des entités. Les parametres pWindow et pCanevas 
+        Méthode d'affichage des Entités. Les parametres pWindow et pCanevas
         sont respectivement la fenêtre et le canvas.
 
         Parameters
