@@ -383,7 +383,7 @@ class Entité:
         None.
 
         """
-        
+            
         self.Position =  pPositionInitiale
         self.Frame1 = pImage1
         self.Frame2 = pImage2
@@ -553,7 +553,8 @@ class Protection:
             distance = math.sqrt((element.Position[0]-pCoordProjectile[0]) ** 2
                                  + (element.Position[1]-pCoordProjectile[1]) ** 2 )
             if distance <= 10 : 
-                element.DegatSubit += 1               
+                element.DegatSubit += 1
+                print(element.DegatSubit)
                 return True
         return False
     
@@ -575,7 +576,7 @@ class Protection:
         """
         
         for element in self.listeBloc:
-            if element.DegatSubit == 5:
+            if element.DegatSubit >= 5:
                 self.listeBloc.remove(element)
                 pCanevas.delete(element.imageOnCanvas)
             else:

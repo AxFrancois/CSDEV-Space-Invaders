@@ -18,11 +18,12 @@ def key_pressed(event):
      print("Key Pressed:"+event.keysym)
 
 
-# %%----------------------Interface graphique---------------------------------#
+
 
 class main:
     
     def __init__(self):
+    # %%----------------------Interface graphique---------------------------------#
         self.window = Tk()
         
         self.window.title('Space invaders')
@@ -91,7 +92,7 @@ class main:
     # %%----------------------Boucle principale-----------------------------------#
     
         while Partie.Vie >= 0:
-            #try:
+            try:
                 if Partie.OnAGagneChef() == True:
                     Partie.LevelUp()
                     texte = "Niveau {} GO !".format(Partie.Niveau )
@@ -120,11 +121,10 @@ class main:
                     time.sleep(0.03333 - frameTime)
                     #print("wait a minute")
                 self.window.update()
-            #except:
-                """
+            except:
                 if int(Partie.Score) > int(Partie.TopScore):
-                    open(Partie.texteFile, 'w').write(str(Partie.Score))"""
-            #    break
+                    open(Partie.texteFile, 'w').write(str(Partie.Score))
+                break
             
         Canevas.delete("all")
         texte1 = "Game Over ! Vous etes mort au niveau {}. Votre score est de {}.".format(niveau,str(Partie.Score))
@@ -138,5 +138,7 @@ class main:
         play = main()
 
 
-
-play = main()
+try:
+    play = main()
+except:
+   pass
