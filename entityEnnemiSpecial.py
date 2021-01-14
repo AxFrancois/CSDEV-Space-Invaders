@@ -1,23 +1,21 @@
 from entity import Entity
 
+
 class EntityEnnemiSpecial(Entity):
     """Sous-classe pour les ennemis speciaux"""
 
     def slidingSpecial(self, pDirection, pCanevas):
         """
         Méthode permettant le déplacement des ennemis spéciaux.
-
         Parameters
         ----------
         pDirection : String
             'l' ou 'r' selon la direction choisie par createSpecialEntities.
         pCanevas : tkinter canevas
             Nécessaire pour l'interface graphique.
-
         Returns
         -------
         None.
-
         """
 
         if pDirection == 'r':

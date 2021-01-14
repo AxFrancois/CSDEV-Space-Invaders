@@ -1,6 +1,7 @@
 from tkinter import PhotoImage
 from entity import Entity
 
+
 class EntityEnnemiClassique(Entity):
     """Sous-classe pour les ennemis classiques"""
 
@@ -9,7 +10,6 @@ class EntityEnnemiClassique(Entity):
         Méthode pour le déplacement des ennemis. pAncienneDirection et
         pNouvelleDirection, qui valent 'l' ou 'r' indique quel a été la
         direction du précédent déplacement et de celui qui doit avoir lieu
-
         Parameters
         ----------
         pAncienneDirection : String
@@ -21,11 +21,9 @@ class EntityEnnemiClassique(Entity):
                                            gauche ou à droite).
         pCanevas : tkinter canevas
             Nécessaire pour l'interface graphique.
-
         Returns
         -------
         None.
-
         """
 
         if pFrame == 0:
@@ -41,7 +39,6 @@ class EntityEnnemiClassique(Entity):
         Méthode pour le déplacement des ennemis. pAncienneDirection et
         pNouvelleDirection, qui valent 'l' ou 'r' indique quel a été la
         direction du précédent déplacement et de celui qui doit avoir lieu
-
         Parameters
         ----------
         pAncienneDirection : String
@@ -53,11 +50,9 @@ class EntityEnnemiClassique(Entity):
                                            gauche ou à droite).
         pCanevas : tkinter canevas
             Nécessaire pour l'interface graphique.
-
         Returns
         -------
         None.
-
         """
 
         if pNouvelleDirection != pAncienneDirection:

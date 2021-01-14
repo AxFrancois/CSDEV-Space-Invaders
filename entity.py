@@ -1,5 +1,6 @@
 from tkinter import PhotoImage
 
+
 class Entity:
     """Classe qui défini toutes les Entitys du jeu"""
 
@@ -23,11 +24,9 @@ class Entity:
         pImage2 : String, optional
             Nom de l'image 2 de l'Entity. Par défaut : None car certaines
             Entity n'ont qu'une seule image.
-
         Returns
         -------
         None.
-
         """
 
         self.Position = pPositionInitiale
@@ -39,12 +38,10 @@ class Entity:
     def getPos(self):
         """
         Méthode getteur pour récuperer la position de l'Entity
-
         Returns
         -------
          Liste de taille 2 contenant 2 entiers/int
             Coordonnées de l'Entity
-
         """
 
         return self.Position

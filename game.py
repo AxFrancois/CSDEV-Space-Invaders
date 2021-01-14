@@ -1,3 +1,4 @@
+from tkinter import PhotoImage
 import random
 import time
 from entityEnnemiSpecial import EntityEnnemiSpecial
@@ -8,6 +9,7 @@ from entityTirJoueur import EntityTirJoueur
 from entityTirEnnemi import EntityTirEnnemi
 from fonction import fAuBoutDuBout
 
+
 class Game:
     """Classe qui gère la partie."""
 
@@ -15,18 +17,15 @@ class Game:
         """
         Méthode de création de la partie. Les parametres pWindow et pCanevas
         sont respectivement la fenêtre et le canvas de tkinter.
-
         Parameters
         ----------
         pWindow : tkinter window
             Nécessaire pour l'interface graphique
         pCanevas : tkinter canevas
             Idem
-
         Returns
         -------
         None.
-
         """
 
         print("INIT")
@@ -47,13 +46,11 @@ class Game:
     def OnAGagneChef(self):
         """
         Méthode permettant de vérifier si le joueur à gagné le niveau.
-
         Returns
         -------
         IsEmpty : Booléen
             False s'il reste des ennemis classique à l'écran.
 			True dans le cas contraire.
-
         """
 
         listeEnnemis = [self.Aliens1, self.Aliens2[0], self.Aliens2[1],
@@ -69,11 +66,9 @@ class Game:
     def LevelUp(self):
         """
         Méthode permettant de level Up.
-
         Returns
         -------
         None.
-
         """
 
         if self.Vie < 3:
@@ -91,11 +86,9 @@ class Game:
         """
         Méthode qui créée les Entitys du jeu, à savoir les ennemis et le
         joueur
-
         Returns
         -------
         None.
-
         """
 
         self.Joueur = EntityJoueur([330, 450], 'Player.gif', self.Window, self.Canevas, 'Player_mort.gif')
@@ -113,16 +106,13 @@ class Game:
     def createSpecialEntities(self, pdirectionRouge):
         """
         Méthode qui permet de créer l'ennemi spécial grâce à la classe EntityEnnemiSpecial.
-
         Parameters
         ----------
         pdirectionRouge : String
 			'l' ou 'r'. Comme son nom l'indique, droite ou gauche.
-
         Returns
         -------
         None.
-
         """
 
         if pdirectionRouge == 'r':
@@ -138,7 +128,6 @@ class Game:
         Returns
         -------
         None.
-
         """
 
         self.Protect = [Protection([67 + i * 160, 380], self.Window, self.Canevas) for i in range(4)]
@@ -148,7 +137,6 @@ class Game:
         Méthode qui affiche les Entitys du jeu et gére les projectiles. Le
         parametre pFrame, qui vaut 0 ou 1, indique s'il faut déplacer et
         changer l'image des aliens.
-
         Parameters
         ----------
         pFrame : Entier/int
@@ -157,11 +145,9 @@ class Game:
 
         pTimer : float
             Valeur du temps depuis le début du niveau.
-
         Returns
         -------
         None.
-
         """
 
         if self.Pause == False:  # Si le jeu est en pause, l'update ne doit pas se faire
@@ -238,11 +224,9 @@ class Game:
     def position_ennemis_update(self):
         """
         Méthode qui change la position des ennemis à chaque appel.
-
         Returns
         -------
         None.
-
         """
 
         if self.Pause == False:
@@ -276,17 +260,14 @@ class Game:
         """
         Méthode qui détecte les pressions des touches du clavier pour
         executer les commandes.
-
         Parameters
         ----------
         event : tkinter event.
             Contient la valeur d'un event tkinter, ici une pression sur le
             clavier.
-
         Returns
         -------
         None.
-
         """
 
         if self.Pause == False:
@@ -319,5 +300,6 @@ class Game:
                     self.Projectile.append(
                         EntityTirEnnemi([PositionTir[0], PositionTir[1] + 10], 'Projectile_alien2_frame1.gif',
                                         self.Window, self.Canevas, 'Projectile_alien2_frame2.gif'))
+
 
 

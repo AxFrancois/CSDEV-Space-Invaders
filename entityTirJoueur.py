@@ -2,6 +2,7 @@ from tkinter import PhotoImage
 import math, random
 from entity import Entity
 
+
 class EntityTirJoueur(Entity):
     """Sous-classe pour les tirs du joueur"""
 
@@ -9,18 +10,15 @@ class EntityTirJoueur(Entity):
         """
         Méthode d'affichage des Entitys. Les parametres pWindow et pCanevas
         sont respectivement la fenêtre et le canvas.
-
         Parameters
         ----------
         pWindow : tkinter window
             Nécessaire pour l'interface graphique
         pCanevas : tkinter canevas
             Idem
-
         Returns
         -------
         None.
-
         """
         self.PixelArt = PhotoImage(master=pWindow,
                                    file='PixelArts/' + self.Frame1)
@@ -32,7 +30,6 @@ class EntityTirJoueur(Entity):
         Méthode pour la détection des hitboxs. Le parametre pListeDesEnnemis
         est une liste dont chaque élément est une liste contenant tous les
         ennemis d'une ligne, EN COMMENCANT PAR LE LIGNE LA PLUS BASSE
-
         Parameters
         ----------
         pListeDesEnnemis : Liste de Liste de d'élement EntityEnnemiClassique
@@ -44,7 +41,6 @@ class EntityTirJoueur(Entity):
                                                                    supprimer).
         Int
             Nombre de point gagné lors du kill.
-
         """
         for i, item in enumerate(pListeDesEnnemis):  # Pour chacune des lignes
             for j, ennemi in enumerate(item):
