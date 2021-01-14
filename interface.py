@@ -9,15 +9,13 @@ github : https://github.com/AxFrancois/Space-Invaders
 # %%----------------------Import----------------------------------------------#
 
 from tkinter import Menu, Canvas, Label, Tk, Button, Frame, StringVar
-import random, time, math, os, sys
-import classes as cl
+import time, math
+from game import Game
 
 # %%----------------------Fonctions de test-----------------------------------#
 
 def key_pressed(event):
      print("Key Pressed:"+event.keysym)
-
-
 
 
 class main:
@@ -92,7 +90,7 @@ class main:
 
     # %%----------------------Initialisations-------------------------------------#
     
-        Partie = cl.Game(self.window,Canevas)
+        Partie = Game(self.window,Canevas)
         frame_buffer = 0
         myScore.set('SCORE : {} (Record : {})'.format(str(Partie.Score), Partie.TopScore))   
         start_time = time.time()
@@ -105,6 +103,7 @@ class main:
     # %%----------------------Boucle principale-----------------------------------#
     
         while Partie.Vie >= 0:
+
             try:
                 if Partie.OnAGagneChef() == True:
                     Partie.LevelUp()
