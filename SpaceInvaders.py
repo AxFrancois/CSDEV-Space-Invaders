@@ -99,10 +99,11 @@ class main:
         while time.time() - self.start_time < 3:
             self.window.update()
         self.Canevas.delete(self.TextId)
+        self.Partie.Pause = False        
     
     def start(self):
     # %%----------------------Boucle principale-----------------------------------#
-        while self.Partie.Vie >= 0:
+        while self.Partie.Vie > 0:
             try:
                 if self.Partie.OnAGagneChef() == True:
                     self.Partie.LevelUp()

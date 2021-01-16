@@ -50,7 +50,7 @@ class Game:
         self.direction = "r"
         self.createProtection()
         self.RandomTimer = random.randint(15, 20)
-        self.Pause = False
+        self.Pause = True
 
     def OnAGagneChef(self):
         """
