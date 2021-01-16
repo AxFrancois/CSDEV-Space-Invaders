@@ -8,7 +8,7 @@ github : https://github.com/AxFrancois/Space-Invaders
 
 # %%----------------------Import----------------------------------------------#
 
-from entity import Entity
+from Classes.entity import Entity
 
 
 class EntityEnnemiSpecial(Entity):

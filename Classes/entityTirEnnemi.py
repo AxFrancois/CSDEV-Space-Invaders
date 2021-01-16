@@ -10,7 +10,7 @@ github : https://github.com/AxFrancois/Space-Invaders
 
 from tkinter import PhotoImage
 import math, random
-from entity import Entity
+from Classes.entity import Entity
 
 
 class EntityTirEnnemi(Entity):

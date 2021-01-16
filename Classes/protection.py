@@ -9,7 +9,7 @@ github : https://github.com/AxFrancois/Space-Invaders
 # %%----------------------Import----------------------------------------------#
 
 import math
-from entityPartieProtection import EntityPartieProtection
+from Classes.entityPartieProtection import EntityPartieProtection
 
 class Protection:
     """classe pour les protections"""
@@ -74,7 +74,6 @@ class Protection:
                                  + (element.Position[1] - pCoordProjectile[1]) ** 2)
             if distance <= 10:
                 element.DegatSubit += 1
-                print(element.DegatSubit)
                 return True
         return False
 

@@ -11,13 +11,13 @@ github : https://github.com/AxFrancois/Space-Invaders
 from tkinter import PhotoImage
 import random
 import time
-from entityEnnemiSpecial import EntityEnnemiSpecial
-from entityEnnemiClassique import EntityEnnemiClassique
-from protection import Protection
-from entityJoueur import EntityJoueur
-from entityTirJoueur import EntityTirJoueur
-from entityTirEnnemi import EntityTirEnnemi
-from fonction import fAuBoutDuBout
+from Classes.entityEnnemiSpecial import EntityEnnemiSpecial
+from Classes.entityEnnemiClassique import EntityEnnemiClassique
+from Classes.protection import Protection
+from Classes.entityJoueur import EntityJoueur
+from Classes.entityTirJoueur import EntityTirJoueur
+from Classes.entityTirEnnemi import EntityTirEnnemi
+from Classes.fonction import fAuBoutDuBout
 
 
 class Game:
@@ -37,8 +37,7 @@ class Game:
         -------
         None.
         """
-
-        print("INIT")
+        
         self.Vie = 3
         self.Score = 0
         self.Niveau = 1

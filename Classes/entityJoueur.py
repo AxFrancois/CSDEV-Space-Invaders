@@ -9,7 +9,7 @@ github : https://github.com/AxFrancois/Space-Invaders
 # %%----------------------Import----------------------------------------------#
 
 from tkinter import PhotoImage
-from entity import Entity
+from Classes.entity import Entity
 
 
 class EntityJoueur(Entity):
