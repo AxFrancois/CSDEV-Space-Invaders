@@ -309,6 +309,3 @@ class Game:
                     self.Projectile.append(
                         EntityTirEnnemi([PositionTir[0], PositionTir[1] + 10], 'Projectile_alien2_frame1.gif',
                                         self.Window, self.Canevas, 'Projectile_alien2_frame2.gif'))
-
-
-

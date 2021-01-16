@@ -91,6 +91,7 @@ class main:
     def reset(self):
     # %%----------------------Initialisations-------------------------------------#
         self.Partie = Game(self.window,self.Canevas)
+        
         self.frame_buffer = 0
         self.myScore.set('SCORE : {} (Record : {})'.format(str(self.Partie.Score), self.Partie.TopScore))   
         self.start_time = time.time()
@@ -132,10 +133,11 @@ class main:
                     time.sleep(0.03333 - frameTime)
                 self.window.update()
             except:
-                if int(self.Partie.Score) > int(self.Partie.TopScore):
-                    open(self.Partie.texteFile, 'w').write(str(self.Partie.Score))
                 break
             
+        if int(self.Partie.Score) > int(self.Partie.TopScore):
+            open(self.Partie.texteFile, 'w').write(str(self.Partie.Score))
+        self.Partie.Pause = True 
         self.Canevas.delete("all")
         texte1 = "Game Over ! Vous etes mort au niveau {}. Votre score est de {}.".format(self.Partie.Niveau,str(self.Partie.Score))
         texte2 = "Appuyez sur New Game pour relancer"
@@ -144,8 +146,10 @@ class main:
         self.window.mainloop()
 
     def restart(self):
-        self.Canevas.delete("all")
         try:
+            
+            self.Canevas.delete("all")
+            self.Partie.Pause = True 
             play.reset()
             play.start()
         except:
