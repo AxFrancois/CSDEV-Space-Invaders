@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Dec 14 13:30:28 2020
+
+@author: Alexis Pincemin & Axel François
+github : https://github.com/AxFrancois/Space-Invaders
+"""
+
+# %%----------------------Import----------------------------------------------#
+
 from tkinter import PhotoImage
 import math, random
 from entity import Entity
