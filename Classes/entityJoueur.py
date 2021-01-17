@@ -19,19 +19,21 @@ class EntityJoueur(Entity):
         """
         Méthode pour le déplacement du joueur. Le parametre pKey est la touche
         pressé sur le clavier.
+        
         Parameters
         ----------
         pKey : String,
             "Right" ou "Left", permet de savoir la touche que le joueur à
             pressé pour se déplacer
+            
         Returns
         -------
         None.
         """
-        if pKey == "Right" and self.Position[0] < 630:
+        if pKey == "Right" and self.Position[0] < 630:  #la valeur 630 (pixels) est necessaire pour empècher au joueur d'éviter de sortir de l'écran par la droite. 
             self.Position[0] += 10
             pCanevas.move(self.imageOnCanvas, 10, 0)
-        elif pKey == "Left" and self.Position[0] > 30:
+        elif pKey == "Left" and self.Position[0] > 30:  #idem avec 30 pour la gauche
             self.Position[0] -= 10
             pCanevas.move(self.imageOnCanvas, -10, 0)
 
@@ -40,12 +42,14 @@ class EntityJoueur(Entity):
         Méthode d'affichage du joueur lorsqu'il décède à cause du clavier car
         c'est jamais de sa faute. Les parametres pWindow et pCanevas sont
         respectivement la fenêtre et le canvas.
+        
         Parameters
         ----------
         pWindow : tkinter window
             Nécessaire pour l'interface graphique.
         pCanevas : tkinter canevas
             Idem.
+            
         Returns
         -------
         None.

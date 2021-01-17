@@ -36,7 +36,7 @@ class EntityPartieProtection(Entity):
         """
 
         self.Position = pCoordonne
-        self.Image0 = 'Protection{}-D0.gif'.format(pNumero)
+        self.Image0 = 'Protection{}-D0.gif'.format(pNumero) #Permet d'afficher chacune des 5 textures correspondant au dégats subbits
         self.Image1 = 'Protection{}-D1.gif'.format(pNumero)
         self.Image2 = 'Protection{}-D2.gif'.format(pNumero)
         self.Image3 = 'Protection{}-D3.gif'.format(pNumero)
@@ -46,11 +46,11 @@ class EntityPartieProtection(Entity):
         self.PixelArt = PhotoImage(master=pWindow,
                                    file='PixelArts/Protections/' + self.Image0)
         self.imageOnCanvas = pCanevas.create_image(self.Position[0], self.Position[1],
-                                                   image=self.PixelArt)
+                                                   image=self.PixelArt) #Affichage sur le canevas
 
     def AffichageBloc(self, pWindow, pCanevas):
         """
-        Méthode pour afficher les blocs
+        Méthode pour afficher les blocs avec l'image correspondant aux dégats qu'ils ont subit
 
         Parameters
         ----------
@@ -64,7 +64,7 @@ class EntityPartieProtection(Entity):
         None.
 
         """
-        if self.DegatSubit == 0:
+        if self.DegatSubit == 0:    #Si le bloc a subit 0 dégat, etc...
             self.Image = self.Image0
         if self.DegatSubit == 1:
             self.Image = self.Image1

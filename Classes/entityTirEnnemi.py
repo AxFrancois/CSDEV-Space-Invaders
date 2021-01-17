@@ -20,6 +20,7 @@ class EntityTirEnnemi(Entity):
         """
         Méthode d'affichage des Entités. Les parametres pWindow et pCanevas
         sont respectivement la fenêtre et le canvas.
+        
         Parameters
         ----------
         pWindow : tkinter window
@@ -29,6 +30,7 @@ class EntityTirEnnemi(Entity):
         pAlternateur : Int
             1 ou 2 selon l'image à afficher. Permet l'annimation des
             projectiles ennemis.
+            
         Returns
         -------
         None.
@@ -51,6 +53,7 @@ class EntityTirEnnemi(Entity):
             Liste de 2 entiers, renseigne les coordonnées du joueur.
         pTirPosition : Liste
              Liste de 2 entiers, renseigne les coordonnées du projectile alien.
+             
         Returns
         -------
         bool

@@ -17,6 +17,9 @@ class Protection:
     def __init__(self, pCoordonne, pWindow, pCanevas):
         """
         Méthode de création des protections.
+        
+        Les nombres magiques utilisé ici sont dût à la taille des images des blocs qui constitue les protections,
+        à savoir 23, 6, 43, 15, 19 et 11
 
         Parameters
         ----------
@@ -34,6 +37,7 @@ class Protection:
         """
 
         self.Position = pCoordonne
+        
         self.bloc1 = EntityPartieProtection([pCoordonne[0], pCoordonne[1] + 23], 1, pWindow,
                                             pCanevas)  # Bloc bas gauche
         self.bloc2 = EntityPartieProtection([pCoordonne[0] + 43, pCoordonne[1] + 23], 1, pWindow,
@@ -55,7 +59,7 @@ class Protection:
 
     def ProtectionDestruction(self, pCoordProjectile):
         """
-        Méthode pour la destruction des éléments de création.
+        Méthode pour la destruction des éléments de la protection.
 
         Parameters
         ----------
@@ -71,8 +75,8 @@ class Protection:
 
         for element in self.listeBloc:
             distance = math.sqrt((element.Position[0] - pCoordProjectile[0]) ** 2
-                                 + (element.Position[1] - pCoordProjectile[1]) ** 2)
-            if distance <= 10:
+                                 + (element.Position[1] - pCoordProjectile[1]) ** 2)    #norme entre le centre projectile et le centre bloc pour calculer la distance 
+            if distance <= 10:  #La taille minimale des blocs est de 12x14 pixels donc si la distance est inférieure à 10 pixels le bloc doit être détruit
                 element.DegatSubit += 1
                 return True
         return False
@@ -95,7 +99,7 @@ class Protection:
         """
 
         for element in self.listeBloc:
-            if element.DegatSubit >= 5:
+            if element.DegatSubit >= 5: #Un bloc à 4 points de vie maxium, s'il a subit plus de 5 dégats on l'enlève
                 self.listeBloc.remove(element)
                 pCanevas.delete(element.imageOnCanvas)
             else:
